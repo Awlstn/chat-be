@@ -3,6 +3,9 @@ import { createServer } from "http";
 
 // 내부 모듈
 import app from "./app.js";
+import dbConnect from "./config/dbConnect.js";
+
+dbConnect(); // DB 연결
 
 const httpServer = createServer(app);
 
