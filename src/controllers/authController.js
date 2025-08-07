@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import User from "../models/User.js";
 
 // 회원가입 signupUser - POST
-const singupUser = asyncHandler(async (req, res) => {
+const signupUser = asyncHandler(async (req, res) => {
     const { userId, password } = req.body;
 
     if (await User.findOne({ userId: userId })) {
@@ -45,4 +45,4 @@ const loginUser = asyncHandler(async (req, res) => {
     res.status(200).json({ message: "로그인 성공" });
 });
 
-export { singupUser, loginUser };
+export { signupUser, loginUser };
