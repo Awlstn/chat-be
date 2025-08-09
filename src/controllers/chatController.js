@@ -14,4 +14,13 @@ const createRoom = asyncHandler(async (req, res) => {
         .json({ message: "채팅방이 만들어졌습니다.", roomId: room._id });
 });
 
-export { createRoom };
+// 방 조회 하는 함수
+const getRoom = asyncHandler(async (req, res) => {
+    const { id } = req.query; // URL 쿼리 파라미터 'id'를 가져옴 (예: ?id=...)
+    const rooms = await Room.find({
+        participants: id,
+    });
+    res.status(200).json({ rooms: rooms });
+});
+
+export { createRoom, getRoom };
