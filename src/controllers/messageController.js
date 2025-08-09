@@ -6,7 +6,9 @@ const getRoomMessages = asyncHandler(async (req, res) => {
     const { roomId } = req.query;
     const roomMessages = await Message.find({
         roomId,
-    }).populate("sender", "userId");
+    })
+        .populate("sender", "userId")
+        .select("_id roomId sender content createdAt"); // message에서 필요한 필드만 선택;
     res.status(200).json({ roomMessages: roomMessages });
 });
 
