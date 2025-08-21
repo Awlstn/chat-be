@@ -11,6 +11,21 @@ const userSchema = new mongoose.Schema(
             type: String,
             required: true,
         },
+        friends: [
+            {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: "User",
+            },
+        ],
+        // 현재 접속 상태
+        status: {
+            type: String,
+            enum: ["online", "offline"],
+            default: "offline",
+        },
+        socketId: {
+            type: String,
+        },
     },
     { timestamps: true },
 );

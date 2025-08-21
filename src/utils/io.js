@@ -1,8 +1,31 @@
 import Message from "../models/Message.js";
+import User from "../models/User.js";
+import { verifyToken } from "../utils/jwt.js";
 
 const registerSocketEvents = (io) => {
     io.on("connection", async (socket) => {
         console.log("A user connected:", socket.id);
+
+        socket.on("login", async (token) => {
+            const decoded = verifyToken(token);
+            if (!decoded) {
+                console.log("유효하지 않은 토큰");
+                socket.disconnect(); // 바로 연결 끊어버리기
+                return;
+            }
+
+            const user = await User.findById(decoded.id);
+            if (!user) {
+                console.log("DB에 없는 유저");
+                socket.disconnect();
+                return;
+            }
+
+            user.socketId = socket.id;
+            await user.save();
+
+            console.log(`${user.userId} 소켓 로그인 성공`);
+        });
 
         socket.on("message", async (message) => {
             console.log("넘어온 메세지 : ", message);

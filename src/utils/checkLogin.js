@@ -1,20 +1,24 @@
-import jwt from "jsonwebtoken";
+import { verifyToken } from "../utils/jwt.js";
 
 const checkLogin = (req, res, next) => {
-    const jwtSecretKey = process.env.JWT_SECRET;
-    const token = req.cookies.token;
-    if (!token) {
-        return res.status(401).json({ message: "로그인이 필요합니다." }); // 401 Unauthorized: 인증 필요
+    // 쿠키 대신 Authorization 헤더에서 가져오기
+    const authHeader = req.headers.authorization; // "Bearer <token>"
+    if (!authHeader) {
+        return res.status(401).json({ message: "로그인이 필요합니다." });
     }
-    jwt.verify(token, jwtSecretKey, (err, decoded) => {
-        if (err) {
-            return res
-                .status(403)
-                .json({ message: "유효하지 않은 토큰입니다." }); // 403 Forbidden: 권한 없음
-        }
-        req.userId = decoded.userId;
-        next();
-    });
+
+    const token = authHeader.split(" ")[1]; // "Bearer " 제거
+    if (!token) {
+        return res.status(401).json({ message: "토큰이 존재하지 않습니다." });
+    }
+
+    const decoded = verifyToken(token);
+    if (!decoded) {
+        return res.status(403).json({ message: "유효하지 않은 토큰입니다." });
+    }
+
+    req.userId = decoded.userId;
+    next();
 };
 
 export default checkLogin;
