@@ -1,5 +1,6 @@
 import Message from "../models/Message.js";
 import User from "../models/User.js";
+import { verifyToken } from "../utils/jwt.js";
 
 const registerSocketEvents = (io) => {
     io.on("connection", async (socket) => {
