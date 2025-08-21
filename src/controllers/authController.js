@@ -42,11 +42,12 @@ const loginUser = asyncHandler(async (req, res) => {
         { id: user._id, userId: user.userId },
         process.env.JWT_SECRET,
     );
-    res.cookie("token", token, {
-        httpOnly: true,
-    });
 
-    res.status(200).json({ message: "로그인 성공", id: user._id });
+    res.status(200).json({
+        message: "로그인 성공",
+        id: user._id,
+        token: token, // 클라이언트가 localStorage 등에 저장
+    });
 });
 
 export { signupUser, loginUser };
