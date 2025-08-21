@@ -21,7 +21,6 @@ const registerSocketEvents = (io) => {
             }
 
             user.socketId = socket.id;
-            user.status = "online";
             await user.save();
 
             console.log(`${user.userId} 소켓 로그인 성공`);
