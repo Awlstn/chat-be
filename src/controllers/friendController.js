@@ -1,6 +1,7 @@
 import asyncHandler from "express-async-handler";
 import FriendRequest from "../models/FriendRequest.js";
 import User from "../models/User.js";
+import { getIO } from "../utils/socketServer.js";
 
 // 친구 요청 시
 const sendFriendRequest = asyncHandler(async (req, res) => {
@@ -47,6 +48,16 @@ const sendFriendRequest = asyncHandler(async (req, res) => {
     });
 
     res.status(201).json({ message: "친구 요청 생성" });
+
+    // 요청 받는 사용자가 온라인 일 경우
+    if (recv.status === "online") {
+        const io = getIO();
+        const senderInfo = {
+            id: senderId,
+            sender: sender.userId,
+        };
+        io.to(recv.socketId).emit("friendRequest", senderInfo);
+    }
 });
 
 export { sendFriendRequest };
