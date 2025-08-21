@@ -38,6 +38,9 @@ const loginUser = asyncHandler(async (req, res) => {
             .json({ message: "비밀번호가 일치하지 않습니다." });
     }
 
+    user.status = "online";
+    await user.save();
+
     const token = jwt.sign(
         { id: user._id, userId: user.userId },
         process.env.JWT_SECRET,
