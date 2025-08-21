@@ -14,7 +14,7 @@ const registerSocketEvents = (io) => {
                 return;
             }
 
-            const user = await User.findById(decoded.userId);
+            const user = await User.findById(decoded.id);
             if (!user) {
                 console.log("DB에 없는 유저");
                 socket.disconnect();
