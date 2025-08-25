@@ -6,7 +6,7 @@ import { getIO } from "../utils/socketServer.js";
 // 친구 요청 시
 const sendFriendRequest = asyncHandler(async (req, res) => {
     const { receiver } = req.body;
-    const senderId = req.userId;
+    const senderId = req.id;
     const sender = await User.findById(senderId);
 
     // 친구 요청 보낸 사람과 받는 사람이 같은 경우
@@ -60,4 +60,13 @@ const sendFriendRequest = asyncHandler(async (req, res) => {
     }
 });
 
-export { sendFriendRequest };
+const getFriendRequest = asyncHandler(async (req, res) => {
+    const id = req.id;
+    const requests = await FriendRequest.find({ receiver: id })
+        .populate("sender", "userId") // 👈 userId만 가져옴
+        .sort({ createdAt: -1 });
+
+    res.status(200).json({ requests: requests });
+});
+
+export { sendFriendRequest, getFriendRequest };
