@@ -6,7 +6,7 @@ import { getIO } from "../utils/socketServer.js";
 // 친구 요청 시
 const sendFriendRequest = asyncHandler(async (req, res) => {
     const { receiver } = req.body;
-    const senderId = req.userId;
+    const senderId = req.id;
     const sender = await User.findById(senderId);
 
     // 친구 요청 보낸 사람과 받는 사람이 같은 경우
