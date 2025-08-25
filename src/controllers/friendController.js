@@ -62,8 +62,8 @@ const sendFriendRequest = asyncHandler(async (req, res) => {
 
 const getFriendRequest = asyncHandler(async (req, res) => {
     const id = req.id;
-    const requests = await FriendRequest.find({ receiver: userId })
-        .populate("sender") // 요청 보낸 유저 정보 같이 가져오기
+    const requests = await FriendRequest.find({ receiver: id })
+        .populate("sender", "userId") // 👈 userId만 가져옴
         .sort({ createdAt: -1 });
 
     res.status(200).json({ requests: requests });
